@@ -58,7 +58,6 @@ TEST_CASE("Test negatives", "[classic]") {
 }
 
 // BDD aproach
-
 SCENARIO("BDD test with zero", "[bdd]") {
     WHEN("The number is 0") {
         THEN("The result is 0") {
@@ -67,107 +66,93 @@ SCENARIO("BDD test with zero", "[bdd]") {
     }
 }
 
-SCENARIO("BDD test any number", "[bdd]") {
-    GIVEN("Any positive number") {
-        WHEN("The number is 1") {
-            THEN("The result is 1") {
-                REQUIRE(fizzbuzz(1) == "1");
-            }
-        }
+SCENARIO("BDD test with numbers", "[bdd]") {
+    GIVEN("Non divisable by 3 and 5 positive numbers") {
+        using Pair = std::pair<int, std::string>;
+        auto [input, expected] = GENERATE(Pair{{0}, {"0"}},
+                                          Pair{{1}, {"1"}},
+                                          Pair{{2}, {"2"}},
+                                          Pair{{4}, {"4"}},
+                                          Pair{{7}, {"7"}},
+                                          Pair{{8}, {"8"}});
 
-        WHEN("The number is 2") {
-            THEN("The result is 2") {
-                REQUIRE(fizzbuzz(2) == "2");
-            }
-        }
-
-        WHEN("The number is 3") {
-            THEN("The result is fizz") {
-                REQUIRE(fizzbuzz(3) == "fizz");
-            }
-        }
-
-        WHEN("The number is 4") {
-            THEN("The result is 4") {
-                REQUIRE(fizzbuzz(4) == "4");
-            }
-        }
-
-        WHEN("The number is 5") {
-            THEN("The result is buzz") {
-                REQUIRE(fizzbuzz(5) == "buzz");
-            }
-        }
-
-        WHEN("The number is 6") {
-            THEN("The result is fizz") {
-                REQUIRE(fizzbuzz(6) == "fizz");
-            }
-        }
-
-        WHEN("The number is a multiple of 3 only") {
-            THEN("The result is fizz") {
-                for (int i = 3; i <= 100; i += 3) {
-                    if (i % 5) {
-                        REQUIRE(fizzbuzz(i) == "fizz");
-                    }
-                }
-            }
-        }
-
-        WHEN("The number is a multiple of 5 only") {
-            THEN("The result is fizz") {
-                for (int i = 5; i <= 100; i += 5) {
-                    if (i % 3) {
-                        REQUIRE(fizzbuzz(i) == "buzz");
-                    }
-                }
-            }
-        }
-
-        WHEN("The number is a multiple of 3 and 5") {
-            THEN("The result is fizz") {
-                for (int i = 15; i <= 100; i += 15) {
-                    REQUIRE(fizzbuzz(i) == "fizzbuzz");
-                }
+        WHEN("The number" << input << " is given") {
+            THEN("The result is number as string") {
+                REQUIRE(fizzbuzz(input) == expected);
             }
         }
     }
 
-    GIVEN("Any negative number") {
-        WHEN("The number is -1") {
-            THEN("The result is -1") {
-                REQUIRE(fizzbuzz(-1) == "-1");
-            }
-        }
-
-        WHEN("The number is -2") {
-            THEN("The result is -2") {
-                REQUIRE(fizzbuzz(-2) == "-2");
-            }
-        }
-
-        WHEN("The number is -3") {
+    GIVEN("Positive numbers divisible by 3") {
+        const std::string expected = "fizz";
+        auto input = GENERATE(3, 6, 9, 12, 18);
+        WHEN("The number" << input << " is given") {
             THEN("The result is fizz") {
-                REQUIRE(fizzbuzz(-3) == "fizz");
+                REQUIRE(fizzbuzz(input) == expected);
             }
         }
+    }
 
-        WHEN("The number is -4") {
-            THEN("The result is -4") {
-                REQUIRE(fizzbuzz(-4) == "-4");
+    GIVEN("Positive numbers divisible by 5") {
+        const std::string expected = "buzz";
+        auto input = GENERATE(5, 10, 20, 25, 35);
+        WHEN("The number" << input << " is given") {
+            THEN("The result is buzz") {
+                REQUIRE(fizzbuzz(input) == expected);
             }
         }
+    }
 
-        WHEN("The number is -5") {
-            THEN("The result is -5") {
-                REQUIRE(fizzbuzz(-5) == "buzz");
+    GIVEN("Positive numbers divisible by 3 and 5") {
+        const std::string expected = "fizzbuzz";
+        auto input = GENERATE(15, 30, 45, 60, 75);
+        WHEN("The number" << input << " is given") {
+            THEN("The result is fizzbuzz") {
+                REQUIRE(fizzbuzz(input) == expected);
             }
         }
+    }
 
-        WHEN("The number is -6") {
-            THEN("The result is -6") {
-                REQUIRE(fizzbuzz(-6) == "fizz");
+    GIVEN("Non divisible by 3 and 5 negative numbers") {
+        using Pair = std::pair<int, std::string>;
+        auto [input, expected] = GENERATE(Pair{{-1}, {"-1"}},
+                                          Pair{{-2}, {"-2"}},
+                                          Pair{{-4}, {"-4"}},
+                                          Pair{{-7}, {"-7"}},
+                                          Pair{{-8}, {"-8"}});
+        WHEN("The number" << input << " is given") {
+            THEN("The result is number as string") {
+                REQUIRE(fizzbuzz(input) == expected);
+            }
+        }
+    }
+
+    GIVEN("Negative numbers divisible by 3") {
+        const std::string expected = "fizz";
+        auto input = GENERATE(-3, -6, -9, -12, -18);
+        WHEN("The number" << input << " is given") {
+            THEN("The result is fizz") {
+                REQUIRE(fizzbuzz(input) == expected);
+            }
+        }
+    }
+
+    GIVEN("Negative numbers divisible by 5") {
+        const std::string expected = "buzz";
+        auto input = GENERATE(-5, -10, -20, -25, -35);
+        WHEN("The number" << input << " is given") {
+            THEN("The result is buzz") {
+                REQUIRE(fizzbuzz(input) == expected);
+            }
+        }
+    }
+
+    GIVEN("Negative numbers divisible by 3 and 5") {
+        const std::string expected = "fizzbuzz";
+        auto input = GENERATE(-15, -30, -45, -60, -75);
+        WHEN("The number" << input << " is given") {
+            THEN("The result is fizzbuzz") {
+                REQUIRE(fizzbuzz(input) == expected);
             }
         }
     }

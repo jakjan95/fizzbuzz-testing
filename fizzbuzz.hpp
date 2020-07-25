@@ -1,17 +1,15 @@
 #include <string>
 
-std::string fizzbuzz(int const number){
-    if(number!= 0){
-        auto m3 = number % 3;
-        auto m5 = number % 5;
+std::string fizzbuzz(const int& number) {
+    if (number) {
+        auto divideByThree = number % 3;
+        auto divideByFive = number % 5;
 
-        if(!m5 && !m3){
+        if (!divideByFive && !divideByThree) {
             return "fizzbuzz";
-        }
-        else if(!m5){
+        } else if (!divideByFive) {
             return "buzz";
-        }
-        else if(!m3){
+        } else if (!divideByThree) {
             return "fizz";
         }
     }
